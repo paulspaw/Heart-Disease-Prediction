@@ -18,3 +18,7 @@ def logistic_regression(data, labels, weights, num_epochs, learning_rate):
         weights[0] = weights[0] - learning_rate * db
 
     return weights
+
+# waitting to update
+def dealMatrix(dataMat,dataLab):
+    pass
