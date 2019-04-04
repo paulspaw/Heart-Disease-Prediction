@@ -17,33 +17,33 @@ export default class SiderLayout extends Component {
   }
 
   render() {
-    return ( 
+    return (
       <Layout>
-        <Sider 
+        <Sider
           trigger = {null}
           collapsible collapsed = {this.state.collapsed}
         >
           <div className = "logo" />
-          <Menu theme = "dark" mode = "inline" defaultSelectedKeys = {['1']}>
+          <Menu className="menu" theme = "dark" mode = "inline" defaultSelectedKeys = {['1']}>
             <Menu.Item key = "1">
-              <Icon type = "home" />
+              <Icon type = "home" style={{fontSize: "20px"}}/>
               <span > Home </span> 
             </Menu.Item> 
             <Menu.Item key = "2">
-              <Icon type = "area-chart" />
+              <Icon type = "area-chart" style={{fontSize: "20px"}}/>
               <span> Analysis </span> 
             </Menu.Item>
-            <Menu.Item key = "3">
-              <Icon type = "solution" />
+            <Menu.Item key = "3" >
+              <Icon type = "solution" style={{fontSize: "20px"}}/>
               <span> Detection </span> 
             </Menu.Item>
             <Menu.Item key = "4">
-              <Icon type = "team" />
+              <Icon type = "team" style={{fontSize: "20px"}}/>
               <span> Team </span> 
             </Menu.Item>
           </Menu>
           </Sider> 
-          <Layout >
+          <Layout style={{height: "100vh"}}>
           <Header style = {{background: '#fff', padding: 0}}>
             <Icon 
               className = "trigger"
