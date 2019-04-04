@@ -1,8 +1,13 @@
+#!/usr/bin/env python3
+# coding=UTF-8
 '''
-COMP9321 2019 Term 1 Assignment Two Code Template
-Student Name:
-Student ID:
+@Description: 
+@Author: Peng LIU, Zhihao LI
+@LastEditors: Peng LIU
+@Date: 2019-04-03 16:58:03
+@LastEditTime: 2019-04-03 17:04:23
 '''
+
 
 import re
 from datetime import datetime
