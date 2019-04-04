@@ -6,7 +6,7 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 #data, labels, weights, num_epochs, learning_rate
-def logistic_regression(data, labels, weights, num_epochs, learning_rate):
+def logistic_regression(data, labels, theta, num_epochs, learning_rate):
     n_samples, n_features = data.shape
     for _ in range(num_epochs):
         y_predict = sigmoid(np.dot(data,theta[1:3])+theta[0])
