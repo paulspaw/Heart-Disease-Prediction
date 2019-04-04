@@ -122,11 +122,15 @@ class Q1Q3(Resource):
             c = conn.cursor()
 
             result = []
-            collections = []
-            cursor = c.execute(
-                f'SELECT * FROM ORIGIN;')
+            cursor = c.execute(f'SELECT * FROM ORIGIN;')
             for row in cursor:
-                print(row)
+                info = {
+                    'chest': row[3], 'pressure': row[4], 'serum': row[5], 'sugar': row[6], 
+                    'electro': row[7], 'heart': row[8], 'exercise': row[9], 'oldpeak': row[10], 
+                    'slope': row[11], 'vessels': row[12], 'that': row[13]
+                    }
+                temp = {'person': row[0], 'age': row[1], 'sex': row[2], 'target': row[14], 'info': info}
+                result.append(temp)
                 
             conn.commit()
             conn.close()
