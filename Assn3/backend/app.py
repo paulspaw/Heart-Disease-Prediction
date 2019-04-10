@@ -18,6 +18,7 @@ from flask_restplus import fields
 from flask_restplus import inputs
 from flask_restplus import reqparse
 import LogisticRegression as lr
+from flask_cors import CORS
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
@@ -102,6 +103,7 @@ def create_db(db_file):
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app,
           default="Heart Disease",  # Default namespace
           title="Heart Disease detection",  # Documentation Title
@@ -111,7 +113,7 @@ create_db('./database/dataSet.db')
 dealData('./database/dataSet.db', './processed.cleveland.data')
 
 @api.route('/collections')
-class Q1Q3(Resource):
+class collections(Resource):
 
     @api.response(200, "ok")
     @api.response(404, 'Error')

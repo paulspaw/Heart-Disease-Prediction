@@ -7,6 +7,7 @@ const TabPane = Tabs.TabPane;
 export default class Analysis extends Component {
   state = {
     mode: 'top',
+    dataSet: undefined
   }
 
   handleModeChange = (e) => {
@@ -15,6 +16,16 @@ export default class Analysis extends Component {
       mode
     });
   }
+
+    getData = async (id, e) => {
+      e.preventDefault()
+      const res = await fetch(`http://localhost:5000/collections/${id}`, {methond: "GET"})
+      const data = await res.json()
+      this.setState({
+        dataSet: data
+      })
+    }
+
 
   render() {
     const { mode } = this.state;
@@ -32,7 +43,8 @@ export default class Analysis extends Component {
           <TabPane tab="Tab 1" key="1">
             <h1>chest pain type</h1>
             <p>1=typical angin,2=atypical angina,3=non-anginal pain,4=asymptomatic</p>
-            <ChartDemo />
+            <button onClick={this.getData.bind(this, 'pressure')}>show chart</button>
+            <ChartDemo dataSet={this.state.dataSet}/>
           </TabPane>
           <TabPane tab="Tab 2" key="2">
             <h1>resting blood pressure</h1>
