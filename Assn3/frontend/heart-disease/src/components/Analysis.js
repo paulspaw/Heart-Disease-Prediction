@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Tabs, Radio } from 'antd';
+import ChartDemo from './ChartDemo'
 
 const TabPane = Tabs.TabPane;
 
@@ -26,11 +27,12 @@ export default class Analysis extends Component {
         <Tabs
           defaultActiveKey="1"
           tabPosition={mode}
-          style={{ height: 220 }}
+          style={{ height: 800 }}
         >
           <TabPane tab="Tab 1" key="1">
             <h1>chest pain type</h1>
             <p>1=typical angin,2=atypical angina,3=non-anginal pain,4=asymptomatic</p>
+            <ChartDemo />
           </TabPane>
           <TabPane tab="Tab 2" key="2">
             <h1>resting blood pressure</h1>
