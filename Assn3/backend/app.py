@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-04 12:08:40
+@LastEditTime: 2019-04-10 16:48:33
 '''
 import pandas as pd
 import requests
@@ -138,6 +138,25 @@ class Q1Q3(Resource):
         except:
             return {'Error': 'DB not established'}, 404
 
+@api.route("/collections/<collection_id>")
+class Collection_id(Resource):
+    @api.response(200, "ok")
+    @api.response(404, 'Error')
+    @api.doc(description="HTTP operation: GET /<collections>/<collection_id>")
+    
+    def get(self,collection_id):
+        try:
+            conn = sqlite3.connect('./database/dataSet.db')
+            c = conn.cursor()
+
+            result = []
+            cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
+            for row in cursor:
+                tmp = {'age': row[0], 'sex': row[1],collection_id:row[2]}
+                result.append(tmp)
+            return result,200
+        except:
+            return {'Error': 'DB not established'}, 404
 
 if __name__ == "__main__":
     app.run(debug = True)
