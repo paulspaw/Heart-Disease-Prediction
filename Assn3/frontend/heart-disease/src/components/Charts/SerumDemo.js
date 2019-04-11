@@ -15,6 +15,15 @@ export default class PressureChart extends Component {
             dataSet: response
         }))
     }
+    toggleDataSeries = (e) => {
+		if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+			e.dataSeries.visible = false;
+		}
+		else{
+			e.dataSeries.visible = true;
+		}
+		this.chart.render();
+    }
 
     toggleDataSeries = (e) => {
         if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -75,10 +84,12 @@ export default class PressureChart extends Component {
                 text: " Average of Serum Cholestoral group by Gender and Age"
             },
             axisX: {
-                title: "Age"
+                title: "Age",
+                includeZero: false
             },
             axisY: {
                 title: "mg/dl",
+                includeZero: false
                 // suffix: "%"
             },
             legend: {

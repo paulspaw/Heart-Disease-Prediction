@@ -15,11 +15,19 @@ export default class BloodSugarDemo extends Component {
             dataSet: response
         }))
     }
+    toggleDataSeries = (e) => {
+        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+        } else {
+            e.dataSeries.visible = true;
+        }
+        this.chart.render();
+    }
+
 
     computeAmount = (Obj) =>{
         let result_male = {}
         let result_female = {}
-        let result = {}
         for(let age = 30; age < 75; age += 1){
             let cnt_male = [0,0]
             let cnt_female = [0,0]
@@ -41,9 +49,8 @@ export default class BloodSugarDemo extends Component {
             result_male[age] = cnt_male
             result_female[age] = cnt_female
         }
-        result.male = result_male
-        result.female = result_female
-        return result 
+        
+        return {male:result_male,female:result_female} 
     }
 
     render() {
@@ -52,31 +59,86 @@ export default class BloodSugarDemo extends Component {
           } else {
             
             let dataSet = this.state.dataSet
-            console.log(dataSet.sort(this.props.compare('age')))
-            // let male = {}
-            // let female = {}
-            
-            let result = this.computeAmount(dataSet)
-            console.log(result)
-            
+            let obj = this.computeAmount(dataSet)
+            let male = obj.male
+            let female = obj.female
+            let dataPoints_male_high = []
+            let dataPoints_male_low = []
+            let dataPoints_female_high = []
+            let dataPoints_female_low = []
+
+            //console.log('male[50] :', male[50]);
+
+            for(let key in male){
+                dataPoints_male_high.push({
+                    x: key/1,
+                    y: male[key][0]
+                })
+                dataPoints_male_low.push({
+                    x: key/1,
+                    y: male[key][1]
+                })
+            }
+
+            for(let key in female){
+                dataPoints_female_high.push({
+                    x: key/1,
+                    y: female[key][0]
+                })
+                dataPoints_female_low.push({
+                    x: key/1,
+                    y: female[key][1]
+                })
+            }
 
             const options = {
-                title: {
-                    text: "Fasting Blood Sugar"
-                },
+                theme: "light2",
                 animationEnabled: true,
-                data: [
+                zoomEnabled: true,
+                title: {
+                    text: " fasting blood sugar"
+                },
+                axisX: {
+                    title: "Age"
+                },
+                axisY: {
+                    title: "Quantity",
+                    // suffix: "%"
+                },
+                legend: {
+                    cursor: "pointer",
+                    // itemclick: this.toggleDataSeries
+                },
+    
+                data: [{
+                    type: "line",
+                    name: "Male more than 120",
+                    showInLegend: true,
+                    toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    dataPoints: dataPoints_male_high
+                },
                 {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: "column",
-                    dataPoints: [
-                        { label: "male over 120",  y: 10  },
-                        { label: "female over 120", y: 15  },
-                        { label: "male less 120", y: 25  },
-                        { label: "female less 120",  y: 30  },
-                    ]
+                    type: "line",
+                    name: "Male less than 120",
+                    showInLegend: true,
+                    toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    dataPoints: dataPoints_male_low
+                },
+                {
+                    type: "line",
+                    name: "Female more than 120",
+                    showInLegend: true,
+                    toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    dataPoints: dataPoints_female_high
+                },
+                {
+                    type: "line",
+                    name: "Female less than 120",
+                    showInLegend: true,
+                    toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    dataPoints: dataPoints_female_low
                 }
-                ]
+            ]
             }
             
             return (

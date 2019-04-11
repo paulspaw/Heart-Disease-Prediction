@@ -24,7 +24,7 @@ export default class ChartDemo extends Component {
         e.dataSeries.visible = true;
       }
       this.chart.render();
-    }
+    }  
 
     render() {
 
