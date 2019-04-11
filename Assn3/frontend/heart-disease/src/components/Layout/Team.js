@@ -9,7 +9,7 @@ export default class team extends Component {
     return (
       <div>
         <Card 
-          style={{ width: 400, margin: 30, display: "inline-block"}}
+          style={{ width: 350, margin: 30, display: "inline-block"}}
           cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
           actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="ellipsis" />]}
         >
@@ -20,7 +20,7 @@ export default class team extends Component {
           />
         </Card>
         <Card
-          style={{ width: 400, margin: 30, display: "inline-block"}}
+          style={{ width: 350, margin: 30, display: "inline-block"}}
           cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
           actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="ellipsis" />]}
         >

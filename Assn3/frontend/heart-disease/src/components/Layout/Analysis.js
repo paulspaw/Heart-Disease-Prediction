@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Tabs, Radio } from 'antd';
 import ChartDemo from '../Charts/ChartDemo'
 import PressureChart from '../Charts/PressureChart'
+import SerumChart from '../Charts/SerumChart'
 
 const TabPane = Tabs.TabPane;
 
