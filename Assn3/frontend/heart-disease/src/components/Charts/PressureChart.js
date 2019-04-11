@@ -47,7 +47,7 @@ export default class PressureChart extends Component {
     if (this.state.dataSet === undefined) {
       return <div></div>
     } else {
-      console.log(this.state.dataSet)
+      //console.log(this.state.dataSet)
       let dataSet = this.state.dataSet.sort(this.props.compare('age'))
       let limit = dataSet.length; 
       let data = [];

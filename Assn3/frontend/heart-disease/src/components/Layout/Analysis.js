@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { Tabs, Radio } from 'antd';
 import ChartDemo from '../Charts/ChartDemo'
 import PressureChart from '../Charts/PressureChart'
-import SerumChart from '../Charts/SerumChart'
+import SerumDemo from '../Charts/SerumDemo';
+import BloodSugarDemo from '../Charts/BloodSugarDemo';
 
 const TabPane = Tabs.TabPane;
 
@@ -59,10 +60,12 @@ export default class Analysis extends Component {
 
           <TabPane tab="Tab 3" key="3">
             <h1>serum cholestoral in mg/dl</h1>
+            <SerumDemo id="serum" compare={this.compare}/>
           </TabPane>
 
           <TabPane tab="Tab 4" key="4">
             <h1>fasting blood sugar > 120 mg/dl</h1>
+            <BloodSugarDemo id="sugar" compare={this.compare}/>
           </TabPane>
 
           <TabPane tab="Tab 5" key="5">
