@@ -4,38 +4,102 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class ChartDemo extends Component {
   
-    state = {
-        dataSet: undefined
-    }
+  state = {
+    dataSet: undefined
+  }
 
-    componentDidMount() {
-        fetch(`http://localhost:5000/collections/${this.props.id}`, {method: "GET"})
-        .then(res => res.json())
-        .then(response => this.setState({
-            dataSet: response
-        }))
+  componentDidMount() {
+    fetch(`http://localhost:5000/collections/${this.props.id}`, {method: "GET"})
+    .then(res => res.json())
+    .then(response => this.setState({
+        dataSet: response
+    }))
+  }
+
+    toggleDataSeries = (e) => {
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      }
+      else{
+        e.dataSeries.visible = true;
+      }
+      this.chart.render();
     }
 
     render() {
 
     if (this.state.dataSet === undefined) {
-      return <h2> press button to show chart </h2>
+      return <div></div>
     } else {
       
       let dataSet = this.state.dataSet
-      let dataPoints_male_1 = []
-      let dataPoints_male_2 = []
-      let dataPoints_male_3 = []
-      let dataPoints_male_4 = []
-      let dataPoints_female_1 = []
-      let dataPoints_female_2 = []
-      let dataPoints_female_3 = []
-      let dataPoints_female_4 = []
+
+      let dataPoints_male_1 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+
+      let dataPoints_male_2 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+
+      let dataPoints_male_3 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+      let dataPoints_male_4 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+
+      let dataPoints_female_1 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+
+      let dataPoints_female_2 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+
+      let dataPoints_female_3 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
+      let dataPoints_female_4 = [
+        {label: "<45",   y: 0},
+        {label: "45-55", y: 0},
+        {label: "55-65", y: 0},
+        {label: "65-75", y: 0},
+        {label: ">75",   y: 0}
+      ]
 
       let dataAge_male = {}
       let dataAge_female = {}
 
-      for(let age = 30; age <= 75; age += 1){
+      for(let age = 30; age <= 85; age += 1){
         let count_male = [0,0,0,0]
         let count_female = [0,0,0,0]
         for(let i = 0; i < dataSet.length; i += 1){
@@ -61,48 +125,63 @@ export default class ChartDemo extends Component {
         dataAge_female[age] = count_female
       }
       
-      
-      for(let key in dataAge_male){
-        //console.log('key :', key);
-        dataPoints_male_1.push({
-          x: key/1,
-          y: dataAge_male[key][0]
-        })
-        dataPoints_male_2.push({
-          x: key/1,
-          y: dataAge_male[key][1]
-        })
-        dataPoints_male_3.push({
-          x: key/1,
-          y: dataAge_male[key][2]
-        })
-        dataPoints_male_4.push({
-          x: key/1,
-          y: dataAge_male[key][3]
-        })
-      }
-      
-      for(let key in dataAge_female){
-        console.log('key :', key);
-        dataPoints_female_1.push({
-          x: key/1,
-          y: dataAge_female[key][0]
-        })
-        dataPoints_female_2.push({
-          x: key/1,
-          y: dataAge_female[key][1]
-        })
-        dataPoints_female_3.push({
-          x: key/1,
-          y: dataAge_female[key][2]
-        })
-        dataPoints_female_4.push({
-          x: key/1,
-          y: dataAge_female[key][3]
-        })
+      for (let key in dataAge_male) {
+        if (key < 45) {
+          dataPoints_male_1[0].y += dataAge_male[key][0]
+          dataPoints_male_2[0].y += dataAge_male[key][1]
+          dataPoints_male_3[0].y += dataAge_male[key][2]
+          dataPoints_male_4[0].y += dataAge_male[key][3]
+        } else if (key < 55) {
+          dataPoints_male_1[1].y += dataAge_male[key][0]
+          dataPoints_male_2[1].y += dataAge_male[key][1]
+          dataPoints_male_3[1].y += dataAge_male[key][2]
+          dataPoints_male_4[1].y += dataAge_male[key][3]
+        } else if (key < 65) {
+          dataPoints_male_1[2].y += dataAge_male[key][0]
+          dataPoints_male_2[2].y += dataAge_male[key][1]
+          dataPoints_male_3[2].y += dataAge_male[key][2]
+          dataPoints_male_4[2].y += dataAge_male[key][3]
+        } else if (key < 75) {
+          dataPoints_male_1[3].y += dataAge_male[key][0]
+          dataPoints_male_2[3].y += dataAge_male[key][1]
+          dataPoints_male_3[3].y += dataAge_male[key][2]
+          dataPoints_male_4[3].y += dataAge_male[key][3]
+        } else {
+          dataPoints_male_1[4].y += dataAge_male[key][0]
+          dataPoints_male_2[4].y += dataAge_male[key][1]
+          dataPoints_male_3[4].y += dataAge_male[key][2]
+          dataPoints_male_4[4].y += dataAge_male[key][3]
+        }
       }
 
-      
+      for (let key in dataAge_female) {
+        if (key < 45) {
+          dataPoints_female_1[0].y += dataAge_female[key][0]
+          dataPoints_female_2[0].y += dataAge_female[key][1]
+          dataPoints_female_3[0].y += dataAge_female[key][2]
+          dataPoints_female_4[0].y += dataAge_female[key][3]
+        } else if (key < 55) {
+          dataPoints_female_1[1].y += dataAge_female[key][0]
+          dataPoints_female_2[1].y += dataAge_female[key][1]
+          dataPoints_female_3[1].y += dataAge_female[key][2]
+          dataPoints_female_4[1].y += dataAge_female[key][3]
+        } else if (key < 65) {
+          dataPoints_female_1[2].y += dataAge_female[key][0]
+          dataPoints_female_2[2].y += dataAge_female[key][1]
+          dataPoints_female_3[2].y += dataAge_female[key][2]
+          dataPoints_female_4[2].y += dataAge_female[key][3]
+        } else if (key < 75) {
+          dataPoints_female_1[3].y += dataAge_female[key][0]
+          dataPoints_female_2[3].y += dataAge_female[key][1]
+          dataPoints_female_3[3].y += dataAge_female[key][2]
+          dataPoints_female_4[3].y += dataAge_female[key][3]
+        } else {
+          dataPoints_female_1[4].y += dataAge_female[key][0]
+          dataPoints_female_2[4].y += dataAge_female[key][1]
+          dataPoints_female_3[4].y += dataAge_female[key][2]
+          dataPoints_female_4[4].y += dataAge_female[key][3]
+        }
+      }      
 
       const options = {
         theme: "light2",
@@ -116,71 +195,77 @@ export default class ChartDemo extends Component {
         },
         axisY: {
           title: "Quantity",
-          // suffix: "%"
+        },
+        toolTip: {
+          shared: true,
+          reversed: true
         },
         legend: {
-          cursor: "pointer",
-          itemclick: this.toggleDataSeries
+				  verticalAlign: "center",
+				  horizontalAlign: "right",
+				  reversed: true,
+				  cursor: "pointer",
+				  itemclick: this.toggleDataSeries
         },
 
         data: [{
-          type: "line",
+          type: "column",
           name: "Male_type_1",
           showInLegend: true,
-          toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_male_1
         },
         {
-          type: "line",
+          type: "column",
           name: "Male_type_2",
-          showInLegend: true,
-          toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>quantity: {y}",
+          showInLegend: true,          
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_male_2
         },
         {
-          type: "line",
+          type: "column",
           name: "Male_type_3",
           showInLegend: true,
-          toolTipContent: "<span style=\"color:#008080 \">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_male_3
         },
         {
-          type: "line",
+          type: "column",
           name: "Male_type_4",
           showInLegend: true,
-          toolTipContent: "<span style=\"color:#4B0080\">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_male_4
         },
         {
-          type: "line",
+          type: "column",
           name: "Female_type_1",
           showInLegend: true,
           markerType: "cross",
-          toolTipContent: "<span style=\"color:#FF8C69 \">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_female_1
         },
         {
-          type: "line",
+          type: "column",
           name: "Female_type_2",
           showInLegend: true,
           markerType: "cross",
-          toolTipContent: "<span style=\"color:#FFE5B4 \">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_female_2
         },
         {
-          type: "line",
+          type: "column",
           name: "Female_type_3",
           showInLegend: true,
           markerType: "cross",
-          toolTipContent: "<span style=\"color:#E6E6FA\">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_female_3
         },
         {
-          type: "line",
+          type: "column",
           name: "Female_type_4",
           showInLegend: true,
           markerType: "cross",
-          toolTipContent: "<span style=\"color:#FF7F50 \">{name}</span><br>Age: {x}<br>quantity: {y}",
+          yValueFormatString: "#,###",
           dataPoints: dataPoints_female_4
         }
       ]
@@ -188,7 +273,6 @@ export default class ChartDemo extends Component {
       
       return (
       <div>
-        <h1>React Scatter Chart with Custom Markers</h1>
         <CanvasJSChart options = {options} 
           onRef={ref => this.chart = ref}
         />

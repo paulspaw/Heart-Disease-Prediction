@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import CanvasJSReact from '../Canvas/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export default class PressureChart extends Component {
-
+export default class SlopeChart extends Component {
   state = {
     dataSet: undefined
   }
@@ -47,7 +46,6 @@ export default class PressureChart extends Component {
     if (this.state.dataSet === undefined) {
       return <div></div>
     } else {
-      //console.log(this.state.dataSet)
       let dataSet = this.state.dataSet.sort(this.props.compare('age'))
       let limit = dataSet.length; 
       let data = [];
@@ -55,13 +53,13 @@ export default class PressureChart extends Component {
         type: "spline",
         name: 'male',
         showInLegend: true,
-        toolTipContent: "<span style=\"color:#4F81BC \">{name}</span><br>Age: {x}<br>Pressure: {y}"
+        toolTipContent: "<span style=\"color:#4F81BC \">{name}</span><br>Age: {x}<br>slope: {y}"
       };
       let dataSeries2 = {
         type: "spline",
         name: 'female',
         showInLegend: true,
-        toolTipContent: "<span style=\"color:#4F81BC \">{name}</span><br>Age: {x}<br>Pressure: {y}"
+        toolTipContent: "<span style=\"color:#4F81BC \">{name}</span><br>Age: {x}<br>slope: {y}"
       };
       let dataPoints1 = [];
       let dataPoints2 = [];
@@ -89,13 +87,13 @@ export default class PressureChart extends Component {
         zoomEnabled: true,
         animationEnabled: true,
         title: {
-          text: "Resting Blood Pressure"
+          text: "slope group by Age and Gender"
         },
         axisX: {
           tile: "age"
         },
         axisY: {
-          title: "resting blood pressure",
+          title: "slope",
           includeZero: false
         },
         legend: {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import CanvasJSReact from '../Canvas/canvasjs.react';
-import { object } from 'prop-types';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class BloodSugarDemo extends Component {
@@ -20,7 +19,7 @@ export default class BloodSugarDemo extends Component {
     computeAmount = (Obj) =>{
         let result_male = {}
         let result_female = {}
-        let result = new Object()
+        let result = {}
         for(let age = 30; age < 75; age += 1){
             let cnt_male = [0,0]
             let cnt_female = [0,0]
@@ -31,7 +30,7 @@ export default class BloodSugarDemo extends Component {
                         default: cnt_male[1] += 1;break;
                     }
                 }
-                if(Obj[key].age === age && Obj[key].sex === 1){
+                if(Obj[key].age === age && Obj[key].sex === 0){
                     switch(Obj[key].sugar){
                         case 1: cnt_female[0] += 1;break;
                         default: cnt_female[1] += 1;break;
@@ -53,10 +52,12 @@ export default class BloodSugarDemo extends Component {
           } else {
             
             let dataSet = this.state.dataSet
-            let male = {}
-            let female = {}
+            console.log(dataSet.sort(this.props.compare('age')))
+            // let male = {}
+            // let female = {}
             
-            result = this.computeAmount(dataSet)
+            let result = this.computeAmount(dataSet)
+            console.log(result)
             
 
             const options = {

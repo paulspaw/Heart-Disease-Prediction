@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import CanvasJSReact from '../Canvas/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export default class PressureChart extends Component {
-
+export default class ExerciseChart extends Component {
   state = {
     dataSet: undefined
   }
@@ -49,6 +48,7 @@ export default class PressureChart extends Component {
     } else {
       //console.log(this.state.dataSet)
       let dataSet = this.state.dataSet.sort(this.props.compare('age'))
+      console.log(dataSet)
       let limit = dataSet.length; 
       let data = [];
       let dataSeries1 = {

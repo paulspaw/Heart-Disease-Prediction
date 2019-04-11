@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 import { Tabs, Radio } from 'antd';
 import ChartDemo from '../Charts/ChartDemo'
 import PressureChart from '../Charts/PressureChart'
-import SerumDemo from '../Charts/SerumDemo';
-import BloodSugarDemo from '../Charts/BloodSugarDemo';
+import SerumDemo from '../Charts/SerumDemo'
+import BloodSugarDemo from '../Charts/BloodSugarDemo'
+import HeartRateChart from '../Charts/HeartRateChart'
+import ExerciseChart from '../Charts/ExerciseChart'
+import OldPeakChart from '../Charts/OldPeak'
+import SlopeChart from '../Charts/SlopeChart'
 
 const TabPane = Tabs.TabPane;
 
@@ -79,18 +83,22 @@ export default class Analysis extends Component {
 
           <TabPane tab="Tab 6" key="6">
             <h1>maximum heart rate achieved</h1>
+            <HeartRateChart id="heart" compare={this.compare} />
           </TabPane>
 
           <TabPane tab="Tab 7" key="7">
             <h1>exercise induced angina</h1>
+            <ExerciseChart id="exercise" compare={this.compare} />
           </TabPane>
 
           <TabPane tab="Tab 8" key="8">
             <h1>oldpeak = ST depression induced by exercise relative to rest</h1>
+            <OldPeakChart id="oldpeak" compare={this.compare} />
           </TabPane>
 
           <TabPane tab="Tab 9" key="9">
             <h1>the slope of the peak exercise ST segment</h1>
+            <SlopeChart id="slope" compare={this.compare} />
           </TabPane>
 
           <TabPane tab="Tab 10" key="10">
