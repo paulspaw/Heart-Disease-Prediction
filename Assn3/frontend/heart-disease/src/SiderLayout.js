@@ -74,15 +74,13 @@ export default class SiderLayout extends Component {
                 minHeight: 280,
               }}
               >
-                <Route exact="true" path="/" component={Home} />
+                <Route exact path="/" component={Home} />
                 <Route path="/analysis" component={Analysis} />
                 <Route path="/detection" component={Detection} />
                 <Route path="/team" component={Team} />
               </Content>
             </Layout>
           </Layout>
-
-
         </div>
       </Router>
     );

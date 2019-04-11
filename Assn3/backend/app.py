@@ -53,7 +53,7 @@ def dealData(db_file, data_file):
         c.executemany('INSERT INTO ORIGIN VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', info)
 
     #calculate number of samples and features
-    numSamples,numFeatures = data.shape
+    numSamples, numFeatures = data.shape
     #print(data[1:20])
 
     #seperate the first 200 records as training set

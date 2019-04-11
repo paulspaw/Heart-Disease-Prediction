@@ -24,11 +24,6 @@ export default class ScatterDemo extends Component {
         console.log(data)
     } 
     
-    // for (let i=0, i<data.length; i+=1){
-    //     console.log(i)
-    // }
-
-
 	render() {
 		const options = {
 			theme: "light2",
