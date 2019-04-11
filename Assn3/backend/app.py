@@ -146,7 +146,7 @@ class Collection_id(Resource):
     @api.response(404, 'Error')
     @api.doc(description="HTTP operation: GET /<collections>/<collection_id>")
     
-    def get(self,collection_id):
+    def get(self, collection_id):
         try:
             conn = sqlite3.connect('./database/dataSet.db')
             c = conn.cursor()
