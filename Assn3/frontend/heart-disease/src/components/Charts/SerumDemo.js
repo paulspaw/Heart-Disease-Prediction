@@ -1,16 +1,30 @@
-import React, { Component } from 'react';
-import CanvasJSReact from './canvasjs.react';
+import React, { Component } from 'react'
+import CanvasJSReact from '../Canvas/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export default class SerumDemo extends Component {
+export default class PressureChart extends Component {
+
+    state = {
+        dataSet: undefined
+    }
+
+    componentDidMount() {
+        fetch(`http://localhost:5000/collections/${this.props.id}`, {method: "GET"})
+        .then(res => res.json())
+        .then(response => this.setState({
+            dataSet: response
+        }))
+    }
+
+
+
     render() {
 
-        if (this.props.dataSet === undefined) {
-          return <h2> press button to show chart </h2>
+        if (this.state.dataSet === undefined) {
+          return <div></div>
         } else {
           
-        let dataSet = this.props.dataSet
-        let limit = dataSet.length
+        let dataSet = this.state.dataSet
         let dataPoints_male = []
         let dataPoints_female = []
         let avgSerumMale = {}
@@ -21,7 +35,7 @@ export default class SerumDemo extends Component {
             let sum_female = 0
             let cnt_male = 0
             let cnt_female = 0
-			for(let i = 0; i < limit; i += 1){
+			for(let i = 0; i < dataSet.length; i += 1){
 				if(dataSet[i].age === age && dataSet[i].sex === 1){
                     sum_male += dataSet[i].serum
                     cnt_male += 1
@@ -84,16 +98,17 @@ export default class SerumDemo extends Component {
             }
         ]
         }
-        
-        return (
-        <div>
-            <h1>React Scatter Chart with Custom Markers</h1>
-            <CanvasJSChart options = {options} 
-                onRef={ref => this.chart = ref}
-            />
-            {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-        </div>
-        );
+
+       
+      return (
+      <div>
+        <CanvasJSChart options = {options} 
+          onRef={ref => this.chart = ref}
+        />
+        {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
+      </div>
+      )
     }
+  }
 }
-}
+
