@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SiderLayout from './SiderLayout';
+import SiderLayout from './components/Layout/SiderLayout';
 
 class App extends Component {
   render() {

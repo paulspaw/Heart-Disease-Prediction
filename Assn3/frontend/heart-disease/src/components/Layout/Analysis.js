@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Tabs, Radio } from 'antd';
-import ChartDemo from './Charts/ChartDemo'
-import PressureChart from './Charts/PressureChart'
+import ChartDemo from '../Charts/ChartDemo'
+import PressureChart from '../Charts/PressureChart'
 
 const TabPane = Tabs.TabPane;
 

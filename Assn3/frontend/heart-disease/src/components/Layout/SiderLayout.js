@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import 'antd/dist/antd.css';
 import './SiderLayout.css';
-import Home from "./components/Home"
-import Analysis from "./components/Analysis"
-import Detection from "./components/Detection"
-import Team from "./components/Team"
+import Home from "./Home"
+import Analysis from "./Analysis"
+import Detection from "./Detection"
+import Team from "./Team"
 import { Layout, Menu, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 
