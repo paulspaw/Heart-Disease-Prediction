@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Tabs, Radio } from 'antd';
+import { Tabs, Radio } from 'antd'
 import ChartDemo from './ChartDemo'
+import SerumDemo from './SerumDemo'
+import BloodSugarDemo from './BloodSugarDemo'
 
 const TabPane = Tabs.TabPane;
 
@@ -46,15 +48,23 @@ export default class Analysis extends Component {
             <button onClick={this.getData.bind(this, 'chest')}>show chart</button>
             <ChartDemo dataSet={this.state.dataSet}/>
           </TabPane>
+
           <TabPane tab="Tab 2" key="2">
             <h1>resting blood pressure</h1>
           </TabPane>
+
           <TabPane tab="Tab 3" key="3">
             <h1>serum cholestoral in mg/dl</h1>
+            <button onClick={this.getData.bind(this, 'serum')}>show chart</button>
+            <SerumDemo dataSet={this.state.dataSet}/>
           </TabPane>
+
           <TabPane tab="Tab 4" key="4">
             <h1>fasting blood sugar > 120 mg/dl</h1>
+            <button onClick={this.getData.bind(this, 'sugar')}>show chart</button>
+            <BloodSugarDemo dataSet={this.state.dataSet}/>
           </TabPane>
+
           <TabPane tab="Tab 5" key="5">
             <h1>resting electrocardiographic results </h1>
             <p>(0=normal,1=having ST-T wave abnormality 
