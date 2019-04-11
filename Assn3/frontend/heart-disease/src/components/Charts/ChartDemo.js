@@ -15,6 +15,16 @@ export default class ChartDemo extends Component {
             dataSet: response
         }))
     }
+    toggleDataSeries = (e) => {
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      }
+      else{
+        e.dataSeries.visible = true;
+      }
+      this.chart.render();
+      }
+  
 
     render() {
 
