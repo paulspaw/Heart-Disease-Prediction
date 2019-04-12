@@ -1,7 +1,10 @@
-import LR_Sklearn as LR_S # Sklearn
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.linear_model import LogisticRegression
+import LR_Sklearn as LR_S  # Sklearn
 
-#随机生成二元二分类的数据: 训练数据和预测数据的比例为6:4。预测数据不能重新随机生成，因为分布不同了。
+#随机生成二元二分类的数据: 训练数据和预测数据的比例为7:3。预测数据不能重新随机生成，因为分布不同了。
 #np.random.seed(828)
 x_data = np.random.random((900, 2))
 y_data = np.array([[1] if 0.3*a[0] + 0.6*a[1] + 0.55 >= 1 else [0] for a in x_data])
@@ -34,18 +37,18 @@ train_x_data, train_y_data, pre_x_data, pre_y_data = alldata
 
 
 
+
 #Sklearn
-regre = LR_S.sklr.fit(train_x_data, train_y_data.T[0])
-pfdata = LR_S.sklr.predict(pre_x_data)
-weig = regre.coef_.T
-weig = np.array([np.append(weig, regre.intercept_)]).T
-dm = LR_S.confusion_matrix(pre_y_data.T[0], pfdata)
-print('混淆矩阵：\n', LR_S.confusion(dm))
+# regre = LR_S.sklr.fit(train_x_data, train_y_data.T[0])
+# pfdata = LR_S.sklr.predict(pre_x_data)
+# weig = regre.coef_.T
+# weig = np.array([np.append(weig, regre.intercept_)]).T
+# dm = LR_S.confusion_matrix(pre_y_data.T[0], pfdata)
+# print('混淆矩阵：\n', LR_S.confusion(dm))
 
 
 ###############结果图示输出
 
-import matplotlib.pyplot as plt
 def fir(datax, datay, nametotle='Training data scatter diagram'):
     #生成散点图需要的数据，将X数据分为2类
     datax1 = datax[datay.T[0] == 1]
@@ -87,4 +90,7 @@ plt.plot(Sk_data[0], Sk_data[1], '-', c='r', linewidth=1)
 plt.title('Sklearn')
 #plt.legend(['Sklearn：%s'%outexpre(weig),'type 1', 'type 0'])
 plt.legend(['Sklearn:','type 1', 'type 0'])
-plt.show()
+#plt.show()
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+fig.savefig('image.png', dpi=100)
