@@ -8,6 +8,7 @@ import HeartRateChart from '../Charts/HeartRateChart'
 import ExerciseChart from '../Charts/ExerciseChart'
 import OldPeakChart from '../Charts/OldPeak'
 import SlopeChart from '../Charts/SlopeChart'
+import ElectroDemo from '../Charts/ElectroDemo'
 
 const TabPane = Tabs.TabPane;
 
@@ -79,6 +80,7 @@ export default class Analysis extends Component {
               2=showing probable or definite left
               ventricular hypertrophy by Estes’ criteria
             </p>
+            <ElectroDemo id="electro" compare={this.compare}/>
           </TabPane>
 
           <TabPane tab="Tab 6" key="6">

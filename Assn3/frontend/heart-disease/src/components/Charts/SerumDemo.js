@@ -25,16 +25,6 @@ export default class PressureChart extends Component {
 		this.chart.render();
     }
 
-    toggleDataSeries = (e) => {
-        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-            e.dataSeries.visible = false;
-        }
-        else{
-            e.dataSeries.visible = true;
-        }
-        this.chart.render();
-    }
-
     render() {
 
         if (this.state.dataSet === undefined) {

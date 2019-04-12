@@ -66,7 +66,7 @@ export default class BloodSugarDemo extends Component {
             let dataPoints_male_low = []
             let dataPoints_female_high = []
             let dataPoints_female_low = []
-
+            
             //console.log('male[50] :', male[50]);
 
             for(let key in male){
@@ -113,6 +113,7 @@ export default class BloodSugarDemo extends Component {
                 data: [{
                     type: "line",
                     name: "Male more than 120",
+                    includeZero: false,
                     showInLegend: true,
                     toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
                     dataPoints: dataPoints_male_high
@@ -120,6 +121,7 @@ export default class BloodSugarDemo extends Component {
                 {
                     type: "line",
                     name: "Male less than 120",
+                    includeZero: false,
                     showInLegend: true,
                     toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
                     dataPoints: dataPoints_male_low
@@ -127,6 +129,7 @@ export default class BloodSugarDemo extends Component {
                 {
                     type: "line",
                     name: "Female more than 120",
+                    includeZero: false,
                     showInLegend: true,
                     toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
                     dataPoints: dataPoints_female_high
@@ -134,6 +137,7 @@ export default class BloodSugarDemo extends Component {
                 {
                     type: "line",
                     name: "Female less than 120",
+                    includeZero: false,
                     showInLegend: true,
                     toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
                     dataPoints: dataPoints_female_low
