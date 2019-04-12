@@ -9,6 +9,8 @@ import ExerciseChart from '../Charts/ExerciseChart'
 import OldPeakChart from '../Charts/OldPeak'
 import SlopeChart from '../Charts/SlopeChart'
 import ElectroDemo from '../Charts/ElectroDemo'
+import ThalDemo from '../Charts/ThalDemo'
+import VesselsDemo from '../Charts/VesselsDemo'
 
 const TabPane = Tabs.TabPane;
 
@@ -105,11 +107,13 @@ export default class Analysis extends Component {
 
           <TabPane tab="Tab 10" key="10">
             <h1>number of major vessels (0-3) colored by flourosopy</h1>
+            <VesselsDemo id="vessels" compare={this.compare} />
           </TabPane>
 
           <TabPane tab="Tab 11" key="11">
             <h1>thal(Thalassemia)</h1>
             <p>3 = normal; 6 = fixed defect; 7 = reversable defect</p>
+            <ThalDemo id="thal" compare={this.compare} />
           </TabPane>
 
         </Tabs>
