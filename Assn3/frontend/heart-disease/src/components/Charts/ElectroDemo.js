@@ -29,7 +29,7 @@ export default class ElectroDemo extends Component {
     computeAmount = (Obj) =>{
         let result_male = {}
         let result_female = {}
-        for(let age = 30; age < 75; age += 1){
+        for(let age = 30; age < 85; age += 1){
             let cnt_male = [0,0,0]
             let cnt_female = [0,0,0]
             for(var key in Obj){
@@ -182,11 +182,11 @@ export default class ElectroDemo extends Component {
                   reversed: true
                 },
                 legend: {
-                          verticalAlign: "center",
-                          horizontalAlign: "right",
-                          reversed: true,
-                          cursor: "pointer",
-                          itemclick: this.toggleDataSeries
+                  verticalAlign: "center",
+                  horizontalAlign: "right",
+                  reversed: true,
+                  cursor: "pointer",
+                  itemclick: this.toggleDataSeries
                 },
         
                 data: [{

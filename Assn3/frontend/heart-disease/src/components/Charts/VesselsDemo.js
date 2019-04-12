@@ -34,7 +34,6 @@ export default class VesselsDemo extends Component {
             let cnt_female = [0,0,0,0]
             for(var key in Obj){
                 if(Obj[key].age === age && Obj[key].sex === 1){
-                    console.log('Obj[key] :',Obj[key] );
                     switch(Obj[key].vessels){
                         case 0: cnt_male[0] += 1;break;
                         case 1: cnt_male[1] += 1;break;

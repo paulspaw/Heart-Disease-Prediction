@@ -15,6 +15,7 @@ export default class BloodSugarDemo extends Component {
             dataSet: response
         }))
     }
+
     toggleDataSeries = (e) => {
         if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
             e.dataSeries.visible = false;
@@ -28,7 +29,7 @@ export default class BloodSugarDemo extends Component {
     computeAmount = (Obj) =>{
         let result_male = {}
         let result_female = {}
-        for(let age = 30; age < 75; age += 1){
+        for(let age = 30; age < 85; age += 1){
             let cnt_male = [0,0]
             let cnt_female = [0,0]
             for(var key in Obj){
@@ -44,12 +45,10 @@ export default class BloodSugarDemo extends Component {
                         default: cnt_female[1] += 1;break;
                     }
                 }
-
             }
             result_male[age] = cnt_male
             result_female[age] = cnt_female
         }
-        
         return {male:result_male,female:result_female} 
     }
 
@@ -62,33 +61,71 @@ export default class BloodSugarDemo extends Component {
             let obj = this.computeAmount(dataSet)
             let male = obj.male
             let female = obj.female
-            let dataPoints_male_high = []
-            let dataPoints_male_low = []
-            let dataPoints_female_high = []
-            let dataPoints_female_low = []
-            
-            //console.log('male[50] :', male[50]);
+            let dataPoints_male_high = [
+              {label: "<45",   y: 0},
+              {label: "45-55", y: 0},
+              {label: "55-65", y: 0},
+              {label: "65-75", y: 0},
+              {label: ">75",   y: 0}
+            ]
+            let dataPoints_male_low = [
+              {label: "<45",   y: 0},
+              {label: "45-55", y: 0},
+              {label: "55-65", y: 0},
+              {label: "65-75", y: 0},
+              {label: ">75",   y: 0}
+            ]
+            let dataPoints_female_high = [
+              {label: "<45",   y: 0},
+              {label: "45-55", y: 0},
+              {label: "55-65", y: 0},
+              {label: "65-75", y: 0},
+              {label: ">75",   y: 0}
+            ]
+            let dataPoints_female_low = [
+              {label: "<45",   y: 0},
+              {label: "45-55", y: 0},
+              {label: "55-65", y: 0},
+              {label: "65-75", y: 0},
+              {label: ">75",   y: 0}
+            ]
 
             for(let key in male){
-                dataPoints_male_high.push({
-                    x: key/1,
-                    y: male[key][0]
-                })
-                dataPoints_male_low.push({
-                    x: key/1,
-                    y: male[key][1]
-                })
+                if (key < 45) {
+                    dataPoints_male_high[0].y += male[key][0]
+                    dataPoints_male_low[0].y += male[key][1]
+                } else if (key < 55) {
+                    dataPoints_male_high[1].y += male[key][0]
+                    dataPoints_male_low[1].y += male[key][1]
+                } else if (key < 65) {
+                    dataPoints_male_high[2].y += male[key][0]
+                    dataPoints_male_low[2].y += male[key][1]
+                } else if (key < 75) {
+                    dataPoints_male_high[3].y += male[key][0]
+                    dataPoints_male_low[3].y += male[key][1]
+                } else {
+                    dataPoints_male_high[4].y += male[key][0]
+                    dataPoints_male_low[4].y += male[key][1]
+                }
             }
 
             for(let key in female){
-                dataPoints_female_high.push({
-                    x: key/1,
-                    y: female[key][0]
-                })
-                dataPoints_female_low.push({
-                    x: key/1,
-                    y: female[key][1]
-                })
+                if (key < 45) {
+                  dataPoints_female_high[0].y += female[key][0]
+                  dataPoints_female_low[0].y += female[key][1]
+                } else if (key < 55) {
+                  dataPoints_female_high[1].y += female[key][0]
+                  dataPoints_female_low[1].y += female[key][1]
+                } else if (key < 65) {
+                  dataPoints_female_high[2].y += female[key][0]
+                  dataPoints_female_low[2].y += female[key][1]
+                } else if (key < 75) {
+                  dataPoints_female_high[3].y += female[key][0]
+                  dataPoints_female_low[3].y += female[key][1]
+                } else {
+                  dataPoints_female_high[4].y += female[key][0]
+                  dataPoints_female_low[4].y += female[key][1]
+                }
             }
 
             const options = {
@@ -103,43 +140,45 @@ export default class BloodSugarDemo extends Component {
                 },
                 axisY: {
                     title: "Quantity",
-                    // suffix: "%"
+                },
+                toolTip: {
+                    shared: true,
+                    reversed: true
                 },
                 legend: {
+                    verticalAlign: "center",
+                    horizontalAlign: "right",
+                    reversed: true,
                     cursor: "pointer",
-                    // itemclick: this.toggleDataSeries
+                    itemclick: this.toggleDataSeries
                 },
     
                 data: [{
-                    type: "line",
+                    type: "column",
                     name: "Male more than 120",
-                    includeZero: false,
                     showInLegend: true,
-                    toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    yValueFormatString: "#,###",
                     dataPoints: dataPoints_male_high
                 },
                 {
-                    type: "line",
+                    type: "column",
                     name: "Male less than 120",
-                    includeZero: false,
                     showInLegend: true,
-                    toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    yValueFormatString: "#,###",
                     dataPoints: dataPoints_male_low
                 },
                 {
-                    type: "line",
+                    type: "column",
                     name: "Female more than 120",
-                    includeZero: false,
                     showInLegend: true,
-                    toolTipContent: "<span style=\"color:#FFCC00 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    yValueFormatString: "#,###",
                     dataPoints: dataPoints_female_high
                 },
                 {
-                    type: "line",
+                    type: "column",
                     name: "Female less than 120",
-                    includeZero: false,
                     showInLegend: true,
-                    toolTipContent: "<span style=\"color:#808000 \">{name}</span><br>Age: {x}<br>Quantity: {y}",
+                    yValueFormatString: "#,###",
                     dataPoints: dataPoints_female_low
                 }
             ]
@@ -147,9 +186,8 @@ export default class BloodSugarDemo extends Component {
             
             return (
             <div>
-                <h1>React Column Chart</h1>
                 <CanvasJSChart options = {options} 
-                    /* onRef={ref => this.chart = ref} */
+                  onRef={ref => this.chart = ref}
                 />
                 {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
             </div>

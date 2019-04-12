@@ -90,7 +90,8 @@ export default class SlopeChart extends Component {
           text: "slope group by Age and Gender"
         },
         axisX: {
-          tile: "age"
+          tile: "age",
+          includeZero: false
         },
         axisY: {
           title: "slope",
