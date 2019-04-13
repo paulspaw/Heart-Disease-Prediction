@@ -188,29 +188,29 @@ class collections(Resource):
     @api.expect(indicator_model)
     @api.doc(description="HTTP operation: POST /<collections>")
     def post(self):
-        # try:
-        element = ['age','sex','chest','pressure','serum','sugar','electro','heart','exercise','oldpeak','slope','vessels','thal']
-        info = []
-        for i in element:
-            info.append(api.payload[i])
-        
-        clf = predict_heart_diease()
-        pred, pred_proba, coef, intercept = cal(clf, info)
+        try:
+            element = ['age','sex','chest','pressure','serum','sugar','electro','heart','exercise','oldpeak','slope','vessels','thal']
+            info = []
+            for i in element:
+                info.append(api.payload[i])
+            
+            clf = predict_heart_diease()
+            pred, pred_proba, coef, intercept = cal(clf, info)
 
-        pred = pred.tolist()
-        pred_proba = pred_proba[0].tolist()
-        intercept = intercept.tolist()
+            pred = pred.tolist()
+            pred_proba = pred_proba[0].tolist()
+            intercept = intercept.tolist()
 
-        coefSet = {}
-        for i in range(0, len(coef[0])):
-            coefSet[f'k{i+1}'] = coef[0][i]
+            coefSet = {}
+            for i in range(0, len(coef[0])):
+                coefSet[f'k{i+1}'] = coef[0][i]
 
-        result = {"disease": pred[0], "probability_0": pred_proba[0], "probability_1": pred_proba[1],
-                "coefficient": coefSet, "intercept": intercept[0]}
+            result = {"disease": pred[0], "probability_0": pred_proba[0], "probability_1": pred_proba[1],
+                    "coefficient": coefSet, "intercept": intercept[0]}
 
-        return {"name":"success", "result": result}, 200
-        # except:
-        #     return {'Error': 'DB not established'}, 404
+            return {"name":"success", "result": result}, 200
+        except:
+            return {'Error': 'DB not established'}, 404
 
     @api.response(200, "ok")
     @api.response(404, 'Error')
