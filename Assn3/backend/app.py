@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-13 14:13:55
+@LastEditTime: 2019-04-13 18:19:31
 '''
 import pandas as pd
 import requests
@@ -18,6 +18,9 @@ from flask_restplus import fields
 from flask_restplus import inputs
 from flask_restplus import reqparse
 from flask_cors import CORS
+import requests
+
+from factors_predict import predict_heart_diease
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
@@ -94,12 +97,42 @@ api = Api(app,
           default="Heart Disease",  # Default namespace
           title="Heart Disease detection",  # Documentation Title
           description="This is just a simple example to show how publish data as a service.")
-
+indicator_model = api.model('detail',{
+                                            'age':fields.Float, 
+                                            'sex':fields.Float,
+                                            'chest':fields.Float,
+                                            'pressure':fields.Float,
+                                            'serum':fields.Float,
+                                            'sugar':fields.Float,
+                                            'electro':fields.Float,
+                                            'heart':fields.Float,
+                                            'exercise':fields.Float,
+                                            'oldpeak':fields.Float,
+                                            'slope':fields.Float,
+                                            'vessels':fields.Float,
+                                            'thal':fields.Float,
+                                            })
 create_db('./database/dataSet.db')
 dealData('./database/dataSet.db', './csvFile/processed.cleveland.data')
 
 @api.route('/collections')
 class collections(Resource):
+    @api.response(200, "ok")
+    @api.response(201, 'Created')
+    @api.response(404, 'Error')
+    @api.expect(indicator_model)
+    @api.doc(description="HTTP operation: POST /<collections>")
+    def post(self):
+        try:
+            element = ['age','sex','chest','pressure','serum','sugar','electro','heart','exercise','oldpeak','slope','vessels','thal']
+            info = []
+            for i in element:
+                info.append(api.payload[i])
+            print(info)
+            
+            return {"result":"success"}, 200
+        except:
+            return {'Error': 'DB not established'}, 404
 
     @api.response(200, "ok")
     @api.response(404, 'Error')
@@ -145,6 +178,7 @@ class Collection_id(Resource):
             return result,200
         except:
             return {'Error': 'DB not established'}, 404
+
 
 
 if __name__ == "__main__":
