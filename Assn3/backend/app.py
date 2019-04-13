@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-13 20:00:46
+@LastEditTime: 2019-04-13 20:30:38
 '''
 import pandas as pd
 import requests
@@ -20,10 +20,11 @@ from flask_restplus import reqparse
 from flask_cors import CORS
 import requests
 
-from factors_predict import predict_heart_diease,potential_important_factors
+from factors_predict import predict_heart_diease,potential_important_factors,cal
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
+    global clf
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
 
@@ -65,8 +66,8 @@ def dealData(db_file, data_file):
     c.executemany('INSERT INTO FACTORS VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,-1)', [info])
     
     #calculate number of samples and features
-    numSamples, numFeatures = data.shape
-    
+    #numSamples, numFeatures = data.shape
+    clf = predict_heart_diease()
     # #seperate the first 200 records as training set
     # data.head(200).to_csv('train.csv')
     # #seperate the rest records as testing set
@@ -146,9 +147,11 @@ class collections(Resource):
             info = []
             for i in element:
                 info.append(api.payload[i])
-            pred,pred_proba,model_accur = predict_heart_diease(info)
-            print(pred)
-            return {"name":"success"}, 200
+            pred,pred_proba = cal(clf,info)
+            print(pred_proba)
+            return {"pred":int(pred[0]),
+                    "pred_proba_0":pred_proba[0][0],
+                    "pred_proba_1":pred_proba[0][1]}, 200
         except:
             return {'Error': 'DB not established'}, 404
 

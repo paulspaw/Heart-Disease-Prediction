@@ -5,7 +5,7 @@
 @Author: Peng LIU
 @LastEditors: Peng LIU
 @Date: 2019-04-13 12:32:48
-@LastEditTime: 2019-04-13 19:12:20
+@LastEditTime: 2019-04-13 20:24:40
 '''
 import matplotlib
 import matplotlib.pyplot as plt
@@ -63,7 +63,7 @@ def potential_important_factors():
     datapath = './csvFile/importance.csv'
     return datapath
 
-def predict_heart_diease(info):
+def predict_heart_diease():
     _, _, X_train, X_test, Y_train, Y_test, gbr = dataDeal()
     #创建逻辑回归模型
     clf = LogisticRegression(solver='liblinear')
@@ -78,15 +78,12 @@ def predict_heart_diease(info):
 
     # rmse = np.sqrt(mean_squared_error(Y_test, pred))
     # score = r2_score(Y_test,pred)
-
+    return clf
+def cal(clf,info):
     arr = dealInfo(info)
     pred = clf.predict(arr)
     pred_proba = clf.predict_proba(arr)
-    
-    return pred,pred_proba,model_accur
-    #result = clf.predict(info)
-    #return result
-
+    return pred,pred_proba
     # coefficient = clf.coef_
     # intercept = clf.intercept_
     # print("SCORE:")
@@ -106,6 +103,6 @@ def dealInfo(info):
     result = np.array(result).T
     return result
 # if __name__ == "__main__":
-    #potential_important_factors()
-    # info = [63,	1,	4,	130,	254,	0,	2,	147,	0,	1.4	,2,	1,	7]
-    # pred,pred_proba,model_accr = predict_heart_diease(info)
+#     potential_important_factors()
+#     info = [63,	1,	4,	130,	254,	0,	2,	147,	0,	1.4	,2,	1,	7]
+#     pred,pred_proba,model_accr = predict_heart_diease(info)
