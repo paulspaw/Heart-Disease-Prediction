@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from prettytable import PrettyTable
 from sklearn import neighbors
 from sklearn.datasets import make_regression
 from sklearn.ensemble import GradientBoostingRegressor
@@ -70,7 +69,7 @@ def predict_heart_diease():
     #训练数据
     clf.fit(X_train, Y_train)
     #模型评估：准确率
-    model_accur = clf.score(X_test,Y_test)
+    # model_accur = clf.score(X_test,Y_test)
     # print(model_accur)
     # 预测值
     # pred = clf.predict(X_test)
@@ -79,11 +78,12 @@ def predict_heart_diease():
     # rmse = np.sqrt(mean_squared_error(Y_test, pred))
     # score = r2_score(Y_test,pred)
     return clf
+    
 def cal(clf,info):
     arr = dealInfo(info)
     pred = clf.predict(arr)
     pred_proba = clf.predict_proba(arr)
-    return pred,pred_proba
+    return pred, pred_proba, clf.coef_, clf.intercept_
     # coefficient = clf.coef_
     # intercept = clf.intercept_
     # print("SCORE:")
@@ -102,7 +102,6 @@ def dealInfo(info):
         result.append([e])
     result = np.array(result).T
     return result
+    
+
 # if __name__ == "__main__":
-#     potential_important_factors()
-#     info = [63,	1,	4,	130,	254,	0,	2,	147,	0,	1.4	,2,	1,	7]
-#     pred,pred_proba,model_accr = predict_heart_diease(info)

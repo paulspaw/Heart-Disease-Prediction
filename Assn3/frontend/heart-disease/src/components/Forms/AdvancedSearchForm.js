@@ -5,9 +5,6 @@ import { Form, Row, Col, Button } from 'antd';
 import InputBar from './InputBar'
 
 export default class AdvancedSearchForm extends React.Component {
-  state = {
-    expand: false,
-  };
 
   render() {
     return (

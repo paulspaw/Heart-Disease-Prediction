@@ -20,7 +20,9 @@ from flask_restplus import reqparse
 from flask_cors import CORS
 import requests
 
-from factors_predict import predict_heart_diease,potential_important_factors
+from factors_predict import *
+
+PREDICT_RESULT = {}
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
@@ -115,24 +117,69 @@ api = Api(app,
           title="Heart Disease detection",  # Documentation Title
           description="This is just a simple example to show how publish data as a service.")
 indicator_model = api.model('detail',{
-                                            'age':fields.Float, 
-                                            'sex':fields.Float,
-                                            'chest':fields.Float,
-                                            'pressure':fields.Float,
-                                            'serum':fields.Float,
-                                            'sugar':fields.Float,
-                                            'electro':fields.Float,
-                                            'heart':fields.Float,
-                                            'exercise':fields.Float,
-                                            'oldpeak':fields.Float,
-                                            'slope':fields.Float,
-                                            'vessels':fields.Float,
-                                            'thal':fields.Float,
-                                            })
+                                        'age':fields.Float, 
+                                        'sex':fields.Float,
+                                        'chest':fields.Float,
+                                        'pressure':fields.Float,
+                                        'serum':fields.Float,
+                                        'sugar':fields.Float,
+                                        'electro':fields.Float,
+                                        'heart':fields.Float,
+                                        'exercise':fields.Float,
+                                        'oldpeak':fields.Float,
+                                        'slope':fields.Float,
+                                        'vessels':fields.Float,
+                                        'thal':fields.Float,
+                                        })
+
 create_db('./database/dataSet.db',"ORIGIN")
 create_db('./database/dataSet.db',"FACTORS")
 dealData('./database/dataSet.db', './csvFile/processed.cleveland.data')
 
+
+@api.route('/prediction')
+class prediction(Resource):
+    @api.response(200, "ok")
+    @api.response(404, 'Error')
+    @api.expect(indicator_model)
+    @api.doc(description="HTTP operation: POST /<prediction>")
+    def post(self):
+        try:
+            print(request.values)
+            info = []
+            info.append(float(request.values['age']))
+            info.append(float(request.values['sex']))
+            info.append(float(request.values['chest']))
+            info.append(float(request.values['pressure']))
+            info.append(float(request.values['blood']))
+            info.append(float(request.values['serum']))
+            info.append(float(request.values['electro']))       
+            info.append(float(request.values['heart']))
+            info.append(float(request.values['exercise']))
+            info.append(float(request.values['oldpeak']))
+            info.append(float(request.values['slope']))
+            info.append(float(request.values['vessels']))
+            info.append(float(request.values['thal']))
+
+            clf = predict_heart_diease()
+            pred, pred_proba, coef, intercept = cal(clf, info)
+            print(pred)
+            print(pred_proba)
+
+            pred = pred.tolist()
+            pred_proba = pred_proba[0].tolist()
+            intercept = intercept.tolist()
+
+            coefSet = {}
+            for i in range(0, len(coef[0])):
+                coefSet[f'k{i+1}'] = coef[0][i]
+
+            result = {"disease": pred[0], "probability_0": pred_proba[0], "probability_1": pred_proba[1],
+                        "coefficient": coefSet, "intercept": intercept[0]}
+
+            return {"name": "success", "result": result}, 200
+        except:
+            return {'Error': 'DB not established'}, 404
 
 @api.route('/collections')
 class collections(Resource):
@@ -146,11 +193,22 @@ class collections(Resource):
         info = []
         for i in element:
             info.append(api.payload[i])
+        
+        clf = predict_heart_diease()
+        pred, pred_proba, coef, intercept = cal(clf, info)
 
-        print(info)
-        # pred, pred_proba, model_accur = predict_heart_diease(info)
-        # print(pred)
-        return {"name":"success"}, 200
+        pred = pred.tolist()
+        pred_proba = pred_proba[0].tolist()
+        intercept = intercept.tolist()
+
+        coefSet = {}
+        for i in range(0, len(coef[0])):
+            coefSet[f'k{i+1}'] = coef[0][i]
+
+        result = {"disease": pred[0], "probability_0": pred_proba[0], "probability_1": pred_proba[1],
+                "coefficient": coefSet, "intercept": intercept[0]}
+
+        return {"name":"success", "result": result}, 200
         # except:
         #     return {'Error': 'DB not established'}, 404
 
@@ -186,28 +244,29 @@ class Collection_id(Resource):
     @api.doc(description="HTTP operation: GET /<collections>/<collection_id>")
     
     def get(self,collection_id):
-        try:
-            conn = sqlite3.connect('./database/dataSet.db')
-            c = conn.cursor()
+        # try:
+        conn = sqlite3.connect('./database/dataSet.db')
+        c = conn.cursor()
 
-            result = []
-            if collection_id != "importance":
-                cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
-                for row in cursor:
-                    tmp = {'age': row[0], 'sex': row[1], collection_id:row[2]}
-                    result.append(tmp)
-
-            elif collection_id == "importance":
-                cursor = c.execute(f"SELECT * FROM FACTORS")
-                for row in cursor:
-                    tmp = {'age': row[1], 'sex': row[2],'chest': row[3], 'pressure': row[4], 
-                            'serum': row[5], 'sugar': row[6], 'electro': row[7], 'heart': row[8], 
-                            'exercise': row[9], 'oldpeak': row[10], 'slope': row[11], 'vessels': row[12], 
-                            'thal': row[13]}
+        result = []
+        if collection_id != "importance" and collection_id != "predict":
+            cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
+            for row in cursor:
+                tmp = {'age': row[0], 'sex': row[1], collection_id:row[2]}
                 result.append(tmp)
-            return result,200
-        except:
-            return {'Error': 'DB not established'}, 404
+
+        elif collection_id == "importance":
+            cursor = c.execute(f"SELECT * FROM FACTORS")
+            for row in cursor:
+                tmp = {'age': row[1], 'sex': row[2],'chest': row[3], 'pressure': row[4], 
+                        'serum': row[5], 'sugar': row[6], 'electro': row[7], 'heart': row[8], 
+                        'exercise': row[9], 'oldpeak': row[10], 'slope': row[11], 'vessels': row[12], 
+                        'thal': row[13]}
+            result.append(tmp)
+
+        return result, 200
+        # except:
+        #     return {'Error': 'DB not established'}, 404
 
 
 
