@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-10 16:48:33
+@LastEditTime: 2019-04-13 14:13:55
 '''
 import pandas as pd
 import requests
@@ -17,7 +17,6 @@ from flask_restplus import Resource, Api
 from flask_restplus import fields
 from flask_restplus import inputs
 from flask_restplus import reqparse
-import LogisticRegression as lr
 from flask_cors import CORS
 
 # deal with the records, delete NaN records and seperate into training part & texting part
@@ -47,6 +46,7 @@ def dealData(db_file, data_file):
 
     #change "target" column, "0" is NO, "1" is Yes
     data = data.replace(to_replace = {"target":[2,3,4,5,6,7,8,9]},value = 1)
+    data.to_csv('./csvFile/CleanHeart.csv')
 
     for index, row in data.iterrows():
         info = [(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13])]
@@ -54,8 +54,7 @@ def dealData(db_file, data_file):
 
     #calculate number of samples and features
     numSamples, numFeatures = data.shape
-    #print(data[1:20])
-
+    
     #seperate the first 200 records as training set
     data.head(200).to_csv('train.csv')
     #seperate the rest records as testing set
@@ -65,15 +64,7 @@ def dealData(db_file, data_file):
     conn.close()
     return
 
-def readData():
-    dataTrain=pd.read_csv("train.csv", usecols=range(3,15))
-    dataTrainMatrix=dataTrain.values
-    dataTrainMatrix = np.insert(dataTrainMatrix, 0, values=1, axis=1)
-    #数据分离，dataMat为x矩阵，第二列到第十一列，共12列
-    dataMat = (dataTrainMatrix[:,0:12])
-    #数据分离，dataLab为y矩阵，第13列
-    dataLab = dataTrainMatrix[:,12:13]
-    print(dataMat[1:10]) 
+    
 
 def create_db(db_file):
     conn = sqlite3.connect(db_file)
@@ -111,7 +102,7 @@ api = Api(app,
           description="This is just a simple example to show how publish data as a service.")
 
 create_db('./database/dataSet.db')
-dealData('./database/dataSet.db', './processed.cleveland.data')
+dealData('./database/dataSet.db', './csvFile/processed.cleveland.data')
 
 @api.route('/collections')
 class collections(Resource):
@@ -155,11 +146,12 @@ class Collection_id(Resource):
             result = []
             cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
             for row in cursor:
-                tmp = {'age': row[0], 'sex': row[1],collection_id:row[2]}
+                tmp = {'age': row[0], 'sex': row[1], collection_id:row[2]}
                 result.append(tmp)
             return result,200
         except:
             return {'Error': 'DB not established'}, 404
+
 
 if __name__ == "__main__":
     app.run(debug = True)
