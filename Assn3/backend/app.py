@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-13 18:19:31
+@LastEditTime: 2019-04-13 18:47:10
 '''
 import pandas as pd
 import requests
@@ -124,7 +124,6 @@ dealData('./database/dataSet.db', './csvFile/processed.cleveland.data')
 @api.route('/collections')
 class collections(Resource):
     @api.response(200, "ok")
-    @api.response(201, 'Created')
     @api.response(404, 'Error')
     @api.expect(indicator_model)
     @api.doc(description="HTTP operation: POST /<collections>")
@@ -134,9 +133,9 @@ class collections(Resource):
             info = []
             for i in element:
                 info.append(api.payload[i])
-            print(info)
-            
-            return {"result":"success"}, 200
+            pred,pred_proba,model_accur = predict_heart_diease(info)
+            print(pred)
+            return {"name":"success"}, 200
         except:
             return {'Error': 'DB not established'}, 404
 

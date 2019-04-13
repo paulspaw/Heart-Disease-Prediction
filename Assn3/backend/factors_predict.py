@@ -5,7 +5,7 @@
 @Author: Peng LIU
 @LastEditors: Peng LIU
 @Date: 2019-04-13 12:32:48
-@LastEditTime: 2019-04-13 16:21:43
+@LastEditTime: 2019-04-13 18:49:18
 '''
 import matplotlib
 import matplotlib.pyplot as plt
@@ -70,18 +70,21 @@ def predict_heart_diease(info):
     clf.fit(X_train, Y_train)
     #模型评估：准确率
     model_accur = clf.score(X_test,Y_test)
+    # print(model_accur)
     # 预测值
     # pred = clf.predict(X_test)
     # pred_proba = clf.predict_proba(X_test)
 
-    rmse = np.sqrt(mean_squared_error(Y_test, pred))
-    score = r2_score(Y_test,pred)
+    # rmse = np.sqrt(mean_squared_error(Y_test, pred))
+    # score = r2_score(Y_test,pred)
 
     arr = dealInfo(info)
     pred = clf.predict(arr)
     pred_proba = clf.predict_proba(arr)
-
+    
     return pred,pred_proba,model_accur
+    #result = clf.predict(info)
+    #return result
 
     # coefficient = clf.coef_
     # intercept = clf.intercept_
@@ -103,5 +106,6 @@ def dealInfo(info):
     return result
 # if __name__ == "__main__":
 #     #potential_important_factors()
-#     predict_heart_diease(info)
-#     #print(re)
+#     info = [63,	1,	4,	130,	254,	0,	2,	147,	0,	1.4	,2,	1,	7]
+#     pred,pred_proba,e=predict_heart_diease(info)
+#     print(pred,pred_proba,e)
