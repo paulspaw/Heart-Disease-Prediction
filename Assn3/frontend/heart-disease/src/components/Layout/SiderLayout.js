@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import './SiderLayout.css';
 import Home from "./Home"
 import Analysis from "./Analysis"
+import Relations from "./Relations"
 import Detection from "./Detection"
 import Team from "./Team"
 import { Layout, Menu, Icon } from 'antd';
@@ -46,12 +47,18 @@ export default class SiderLayout extends Component {
                   </Link>
                 </Menu.Item>
                 <Menu.Item key = "3" >
+                  <Link to="/relations">
+                    <Icon type = "solution" style={{fontSize: "20px"}}/>
+                    <span> Relations </span> 
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key = "4" >
                   <Link to="/detection">
                     <Icon type = "solution" style={{fontSize: "20px"}}/>
                     <span> Detection </span> 
                   </Link>
                 </Menu.Item>
-                <Menu.Item key = "4">
+                <Menu.Item key = "5">
                   <Link to="/team">
                     <Icon type = "team" style={{fontSize: "20px"}}/>
                     <span> Team </span> 
@@ -76,6 +83,7 @@ export default class SiderLayout extends Component {
               >
                 <Route exact path="/" component={Home} />
                 <Route path="/analysis" component={Analysis} />
+                <Route path="/relations" component={Relations} />
                 <Route path="/detection" component={Detection} />
                 <Route path="/team" component={Team} />
               </Content>

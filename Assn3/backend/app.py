@@ -57,6 +57,12 @@ def dealData(db_file, data_file):
 
     #calculate number of samples and features
     numSamples, numFeatures = data.shape
+    
+    #seperate the first 200 records as training set
+    data.head(200).to_csv('train.csv')
+    #seperate the rest records as testing set
+    data.tail(numSamples - 200).to_csv('test.csv')
+    data.to_csv('data.csv')
     conn.commit()
     conn.close()
     return
@@ -165,7 +171,7 @@ class Collection_id(Resource):
     @api.response(404, 'Error')
     @api.doc(description="HTTP operation: GET /<collections>/<collection_id>")
     
-    def get(self, collection_id):
+    def get(self,collection_id):
         try:
             conn = sqlite3.connect('./database/dataSet.db')
             c = conn.cursor()
@@ -173,7 +179,7 @@ class Collection_id(Resource):
             result = []
             cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
             for row in cursor:
-                tmp = {'age': row[0], 'sex': row[1],collection_id:row[2]}
+                tmp = {'age': row[0], 'sex': row[1], collection_id:row[2]}
                 result.append(tmp)
             return result,200
         except:
