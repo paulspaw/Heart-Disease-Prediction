@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-13 20:30:38
+@LastEditTime: 2019-04-13 20:00:46
 '''
 import pandas as pd
 import requests
@@ -20,11 +20,10 @@ from flask_restplus import reqparse
 from flask_cors import CORS
 import requests
 
-from factors_predict import predict_heart_diease,potential_important_factors,cal
+from factors_predict import predict_heart_diease,potential_important_factors
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
-    global clf
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
 
@@ -66,8 +65,8 @@ def dealData(db_file, data_file):
     c.executemany('INSERT INTO FACTORS VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,-1)', [info])
     
     #calculate number of samples and features
-    #numSamples, numFeatures = data.shape
-    clf = predict_heart_diease()
+    numSamples, numFeatures = data.shape
+    
     # #seperate the first 200 records as training set
     # data.head(200).to_csv('train.csv')
     # #seperate the rest records as testing set
@@ -142,18 +141,18 @@ class collections(Resource):
     @api.expect(indicator_model)
     @api.doc(description="HTTP operation: POST /<collections>")
     def post(self):
-        try:
-            element = ['age','sex','chest','pressure','serum','sugar','electro','heart','exercise','oldpeak','slope','vessels','thal']
-            info = []
-            for i in element:
-                info.append(api.payload[i])
-            pred,pred_proba = cal(clf,info)
-            print(pred_proba)
-            return {"pred":int(pred[0]),
-                    "pred_proba_0":pred_proba[0][0],
-                    "pred_proba_1":pred_proba[0][1]}, 200
-        except:
-            return {'Error': 'DB not established'}, 404
+        # try:
+        element = ['age','sex','chest','pressure','serum','sugar','electro','heart','exercise','oldpeak','slope','vessels','thal']
+        info = []
+        for i in element:
+            info.append(api.payload[i])
+
+        print(info)
+        # pred, pred_proba, model_accur = predict_heart_diease(info)
+        # print(pred)
+        return {"name":"success"}, 200
+        # except:
+        #     return {'Error': 'DB not established'}, 404
 
     @api.response(200, "ok")
     @api.response(404, 'Error')

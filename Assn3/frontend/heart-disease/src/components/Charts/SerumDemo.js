@@ -15,6 +15,7 @@ export default class PressureChart extends Component {
             dataSet: response
         }))
     }
+    
     toggleDataSeries = (e) => {
 		if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
 			e.dataSeries.visible = false;
