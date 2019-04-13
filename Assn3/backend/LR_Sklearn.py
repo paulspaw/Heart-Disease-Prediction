@@ -5,7 +5,7 @@
 @Author: Peng LIU
 @LastEditors: Peng LIU
 @Date: 2019-04-12 19:24:46
-@LastEditTime: 2019-04-13 00:57:08
+@LastEditTime: 2019-04-13 01:01:26
 '''
 
 from sklearn.linear_model import LogisticRegression
@@ -113,39 +113,19 @@ def tnd_ydata(datdxx, weights):
 
 # 主函数
 if __name__ == "__main__":
-    # H_Data = dataNormalization("./CleanHeart.csv")
-    # alldata = divided(H_Data[0], H_Data[1])
-    # train_x_data, train_y_data, pre_x_data, pre_y_data = alldata
-    # regre = sklr.fit(train_x_data, train_y_data.T[0])
-    # predata = sklr.predict(pre_x_data)
-    # weig = regre.coef_.T
-    # weig = np.array([np.append(weig, regre.intercept_)]).T
-    # dm = confusion_matrix(pre_y_data.T[0], predata)
-    # print('混淆矩阵：\n', confusion(dm))
-    # print(train_x_data,train_y_data.T[0])
-    
-    # Sk_data = tnd_ydata(train_x_data, weig)
-
-    # plt.plot()
-    # fir(train_x_data, train_y_data) #绘制训练数据
-    # plt.plot(Sk_data[0], Sk_data[1], '-', c='r', linewidth=1)
-    # plt.title('Sklearn')
-    # #plt.legend(['Sklearn：%s'%outexpre(weig),'type 1', 'type 0'])
-    # plt.legend(['Sklearn:','type 1', 'type 0'])
-    # plt.show()
-#------------------------随机300个数字对比-----------------------
-    x_data = np.random.random((297, 2))
-    y_data = np.array([[1] if 0.3*a[0] + 0.6*a[1] + 0.55 >= 1 else [0] for a in x_data])
-    alldata = divided(x_data, y_data)
+    H_Data = dataNormalization("./CleanHeart.csv")
+    alldata = divided(H_Data[0], H_Data[1])
     train_x_data, train_y_data, pre_x_data, pre_y_data = alldata
     regre = sklr.fit(train_x_data, train_y_data.T[0])
-    pfdata = sklr.predict(pre_x_data)
+    predata = sklr.predict(pre_x_data)
     weig = regre.coef_.T
     weig = np.array([np.append(weig, regre.intercept_)]).T
-    dm = confusion_matrix(pre_y_data.T[0], pfdata)
+    dm = confusion_matrix(pre_y_data.T[0], predata)
     print('混淆矩阵：\n', confusion(dm))
+    print(train_x_data,train_y_data.T[0])
     
     Sk_data = tnd_ydata(train_x_data, weig)
+
     plt.plot()
     fir(train_x_data, train_y_data) #绘制训练数据
     plt.plot(Sk_data[0], Sk_data[1], '-', c='r', linewidth=1)
@@ -153,6 +133,26 @@ if __name__ == "__main__":
     #plt.legend(['Sklearn：%s'%outexpre(weig),'type 1', 'type 0'])
     plt.legend(['Sklearn:','type 1', 'type 0'])
     plt.show()
+#------------------------随机300个数字对比-----------------------
+    # x_data = np.random.random((297, 2))
+    # y_data = np.array([[1] if 0.3*a[0] + 0.6*a[1] + 0.55 >= 1 else [0] for a in x_data])
+    # alldata = divided(x_data, y_data)
+    # train_x_data, train_y_data, pre_x_data, pre_y_data = alldata
+    # regre = sklr.fit(train_x_data, train_y_data.T[0])
+    # pfdata = sklr.predict(pre_x_data)
+    # weig = regre.coef_.T
+    # weig = np.array([np.append(weig, regre.intercept_)]).T
+    # dm = confusion_matrix(pre_y_data.T[0], pfdata)
+    # print('混淆矩阵：\n', confusion(dm))
+    
+    # Sk_data = tnd_ydata(train_x_data, weig)
+    # plt.plot()
+    # fir(train_x_data, train_y_data) #绘制训练数据
+    # plt.plot(Sk_data[0], Sk_data[1], '-', c='r', linewidth=1)
+    # plt.title('Sklearn')
+    # #plt.legend(['Sklearn：%s'%outexpre(weig),'type 1', 'type 0'])
+    # plt.legend(['Sklearn:','type 1', 'type 0'])
+    # plt.show()
 #---------------------------------------------------------------
     # H_Data = dataNormalization("./CleanHeart.csv")
     # regre = sklr.fit(H_Data[0], H_Data[1].T[0])
