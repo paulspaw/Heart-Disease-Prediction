@@ -5,7 +5,7 @@
 @Author: Peng LIU
 @LastEditors: Peng LIU
 @Date: 2019-04-13 12:32:48
-@LastEditTime: 2019-04-13 14:31:51
+@LastEditTime: 2019-04-13 14:41:05
 '''
 import matplotlib
 import matplotlib.pyplot as plt
@@ -23,12 +23,12 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def dataDeal():
-    global X, Y
     df = pd.read_csv("./csvFile/CleanHeart.csv")
     df = df.drop(columns = ['Unnamed: 0'])
 
     f, ax = plt.subplots(figsize=(5, 5))
     corrmat = df.corr()
+    #print(corrmat)
     sns.heatmap(corrmat, vmax=.8, square=True)
     fig = matplotlib.pyplot.gcf()
     fig.set_size_inches(18.5, 10.5)
@@ -41,11 +41,11 @@ def dataDeal():
     alldata = train_test_split(X,Y, test_size=0.3)
     X_train, X_test, Y_train, Y_test = alldata
     gbr = GradientBoostingRegressor(loss ='ls', max_depth=6)
-    return X_train, X_test, Y_train, Y_test, gbr
+    return X, Y, X_train, X_test, Y_train, Y_test, gbr
 
 
-def potential_important_factors(X_train, X_test, Y_train, Y_test, gbr):
-
+def potential_important_factors():
+    X, Y, X_train, X_test, Y_train, Y_test, gbr = dataDeal()
     gbr.fit (X_train, Y_train)
     predicted = gbr.predict(X_test)
     rmse = np.sqrt(mean_squared_error(Y_test, predicted))
@@ -61,8 +61,8 @@ def potential_important_factors(X_train, X_test, Y_train, Y_test, gbr):
     cdf = pd.DataFrame(data = gbr.feature_importances_, index = X.columns, columns = ['Importance'])
     cdf.to_csv('./csvFile/importance.csv')
 
-def predict_heart_diease(X_train, X_test, Y_train, Y_test, gbr):
-
+def predict_heart_diease():
+    _, _, X_train, X_test, Y_train, Y_test, gbr = dataDeal()
     #创建逻辑回归模型
     clf = LogisticRegression(solver='liblinear')
     #训练数据
@@ -88,6 +88,5 @@ def predict_heart_diease(X_train, X_test, Y_train, Y_test, gbr):
     print(clf.intercept_)
 
 if __name__ == "__main__":
-    X_train, X_test, Y_train, Y_test, gbr = dataDeal()
-    potential_important_factors(X_train, X_test, Y_train, Y_test, gbr)
-    predict_heart_diease(X_train, X_test, Y_train, Y_test, gbr)
+    potential_important_factors()
+    predict_heart_diease()
