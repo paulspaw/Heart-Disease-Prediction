@@ -5,7 +5,7 @@
 @Author: Peng LIU
 @LastEditors: Peng LIU
 @Date: 2019-04-13 12:32:48
-@LastEditTime: 2019-04-13 18:49:18
+@LastEditTime: 2019-04-13 19:12:20
 '''
 import matplotlib
 import matplotlib.pyplot as plt
@@ -60,8 +60,9 @@ def potential_important_factors():
 
     cdf = pd.DataFrame(data = gbr.feature_importances_, index = X.columns, columns = ['Importance'])
     cdf.to_csv('./csvFile/importance.csv')
+    datapath = './csvFile/importance.csv'
+    return datapath
 
-from sklearn import preprocessing
 def predict_heart_diease(info):
     _, _, X_train, X_test, Y_train, Y_test, gbr = dataDeal()
     #创建逻辑回归模型
@@ -105,7 +106,6 @@ def dealInfo(info):
     result = np.array(result).T
     return result
 # if __name__ == "__main__":
-#     #potential_important_factors()
-#     info = [63,	1,	4,	130,	254,	0,	2,	147,	0,	1.4	,2,	1,	7]
-#     pred,pred_proba,e=predict_heart_diease(info)
-#     print(pred,pred_proba,e)
+    #potential_important_factors()
+    # info = [63,	1,	4,	130,	254,	0,	2,	147,	0,	1.4	,2,	1,	7]
+    # pred,pred_proba,model_accr = predict_heart_diease(info)

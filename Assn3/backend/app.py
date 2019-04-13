@@ -5,7 +5,7 @@
 @Author: Peng LIU, Zhihao LI
 @LastEditors: Peng LIU
 @Date: 2019-04-03 16:58:03
-@LastEditTime: 2019-04-13 18:47:10
+@LastEditTime: 2019-04-13 20:00:46
 '''
 import pandas as pd
 import requests
@@ -20,7 +20,7 @@ from flask_restplus import reqparse
 from flask_cors import CORS
 import requests
 
-from factors_predict import predict_heart_diease
+from factors_predict import predict_heart_diease,potential_important_factors
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
@@ -54,27 +54,38 @@ def dealData(db_file, data_file):
     for index, row in data.iterrows():
         info = [(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13])]
         c.executemany('INSERT INTO ORIGIN VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', info)
-
+    
+    #计算潜在的影响性比率
+    file = potential_important_factors()
+    potential = pd.read_csv(file, header = None)
+    tmp = []
+    for index,row in potential.iterrows():
+        tmp.append(row[1])
+    info = tuple(tmp[1:])
+    c.executemany('INSERT INTO FACTORS VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,-1)', [info])
+    
     #calculate number of samples and features
     numSamples, numFeatures = data.shape
     
-    #seperate the first 200 records as training set
-    data.head(200).to_csv('train.csv')
-    #seperate the rest records as testing set
-    data.tail(numSamples - 200).to_csv('test.csv')
-    data.to_csv('data.csv')
+    # #seperate the first 200 records as training set
+    # data.head(200).to_csv('train.csv')
+    # #seperate the rest records as testing set
+    # data.tail(numSamples - 200).to_csv('test.csv')
+    # data.to_csv('data.csv')
     conn.commit()
     conn.close()
     return
 
-    
+    conn.commit()
+    conn.close()
+    return   
 
-def create_db(db_file):
+def create_db(db_file,table_name):
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
 
-    c.execute('DROP TABLE IF EXISTS ORIGIN')
-    c. execute('''CREATE TABLE ORIGIN
+    c.execute(f'DROP TABLE IF EXISTS {table_name}')
+    c.execute(f'''CREATE TABLE {table_name}
         (person    INT    PRIMARY KEY    NOT NULL,
          age       FLOAT,
          sex       FLOAT,
@@ -118,8 +129,10 @@ indicator_model = api.model('detail',{
                                             'vessels':fields.Float,
                                             'thal':fields.Float,
                                             })
-create_db('./database/dataSet.db')
+create_db('./database/dataSet.db',"ORIGIN")
+create_db('./database/dataSet.db',"FACTORS")
 dealData('./database/dataSet.db', './csvFile/processed.cleveland.data')
+
 
 @api.route('/collections')
 class collections(Resource):
@@ -157,7 +170,7 @@ class collections(Resource):
                     }
                 temp = {'person': row[0], 'age': row[1], 'sex': row[2], 'target': row[14], 'info': info}
                 result.append(temp)
-                
+            
             conn.commit()
             conn.close()
             return result, 200
@@ -176,9 +189,19 @@ class Collection_id(Resource):
             c = conn.cursor()
 
             result = []
-            cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
-            for row in cursor:
-                tmp = {'age': row[0], 'sex': row[1], collection_id:row[2]}
+            if collection_id != "importance":
+                cursor = c.execute(f"SELECT age,sex,{collection_id} FROM ORIGIN")
+                for row in cursor:
+                    tmp = {'age': row[0], 'sex': row[1], collection_id:row[2]}
+                    result.append(tmp)
+
+            elif collection_id == "importance":
+                cursor = c.execute(f"SELECT * FROM FACTORS")
+                for row in cursor:
+                    tmp = {'age': row[1], 'sex': row[2],'chest': row[3], 'pressure': row[4], 
+                            'serum': row[5], 'sugar': row[6], 'electro': row[7], 'heart': row[8], 
+                            'exercise': row[9], 'oldpeak': row[10], 'slope': row[11], 'vessels': row[12], 
+                            'thal': row[13]}
                 result.append(tmp)
             return result,200
         except:
