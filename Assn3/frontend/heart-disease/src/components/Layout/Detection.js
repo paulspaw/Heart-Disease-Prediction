@@ -55,13 +55,31 @@ export default class Detection extends Component {
 
   render() {
 
-    console.log(this.state.predictData)
-
-    return (
-      <div>
-        <this.WrappedAdvancedSearchForm getValue={this.getValue}/>
-        <div className = "search-result-list"> Search Result List </div>
-      </div>
-    )
+    if (this.state.predictData !== undefined) {
+      console.log(this.state.predictData)
+      return (
+        <div>
+          <this.WrappedAdvancedSearchForm getValue={this.getValue} />
+          <div className="search-result-list">
+            <span style={{ fontSize: "30px" }}>Has heart diseases? {this.state.predictData["result"]["disease"]}</span>
+            <br />
+            <br />
+            <span style={{ fontSize: "30px" }}>Probability of no heart diseases: {this.state.predictData["result"]["probability_0"]}</span>
+            <br />
+            <br />
+            <span style={{ fontSize: "30px" }}>Probability of having heart diseases: {this.state.predictData["result"]["probability_1"]}</span>
+            <br />
+            <br />
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <this.WrappedAdvancedSearchForm getValue={this.getValue} />
+          <div className="search-result-list"> Search Result List </div>
+        </div>
+      )
+    }
   }
 }
