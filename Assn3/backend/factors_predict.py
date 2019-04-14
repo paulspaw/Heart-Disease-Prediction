@@ -14,7 +14,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn import neighbors
 from sklearn.datasets import make_regression
-from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import cross_val_score, train_test_split
@@ -39,25 +39,25 @@ def dataDeal():
 
     alldata = train_test_split(X,Y, test_size=0.3)
     X_train, X_test, Y_train, Y_test = alldata
-    gbr = GradientBoostingRegressor(loss ='ls', max_depth=6)
-    return X, Y, X_train, X_test, Y_train, Y_test, gbr
+    regr = RandomForestRegressor(n_estimators=100)
+    return X, Y, X_train, X_test, Y_train, Y_test, regr
 
 
 def potential_important_factors():
-    X, Y, X_train, X_test, Y_train, Y_test, gbr = dataDeal()
-    gbr.fit (X_train, Y_train)
-    predicted = gbr.predict(X_test)
+    X, Y, X_train, X_test, Y_train, Y_test, regr = dataDeal()
+    regr.fit (X_train, Y_train)
+    predicted = regr.predict(X_test)
     rmse = np.sqrt(mean_squared_error(Y_test, predicted))
-    scores = cross_val_score(gbr, X, Y, cv=12)
+    scores = cross_val_score(regr, X, Y, cv=12)
 
-    # print('\nCross Validation Scores:')
-    # print(scores)
-    # print('\nMean Score:')
-    # print(scores.mean())
-    # print('\nRMSE:')
-    # print(rmse)
+    print('\nCross Validation Scores:')
+    print(scores)
+    print('\nMean Score:')
+    print(scores.mean())
+    print('\nRMSE:')
+    print(rmse)
 
-    cdf = pd.DataFrame(data = gbr.feature_importances_, index = X.columns, columns = ['Importance'])
+    cdf = pd.DataFrame(data = regr.feature_importances_, index = X.columns, columns = ['Importance'])
     cdf.to_csv('./csvFile/importance.csv')
     datapath = './csvFile/importance.csv'
     return datapath
