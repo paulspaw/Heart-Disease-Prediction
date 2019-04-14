@@ -19,10 +19,11 @@ from flask_restplus import inputs
 from flask_restplus import reqparse
 from flask_cors import CORS
 import requests
-
 from factors_predict import *
 
-PREDICT_RESULT = {}
+clf = predict_heart_diease()
+file = potential_important_factors()
+potential = pd.read_csv(file, header=None)
 
 # deal with the records, delete NaN records and seperate into training part & texting part
 def dealData(db_file, data_file):
@@ -58,8 +59,8 @@ def dealData(db_file, data_file):
         c.executemany('INSERT INTO ORIGIN VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', info)
     
     #计算潜在的影响性比率
-    file = potential_important_factors()
-    potential = pd.read_csv(file, header = None)
+    # file = potential_important_factors()
+    # potential = pd.read_csv(file, header = None)
     tmp = []
     for index,row in potential.iterrows():
         tmp.append(row[1])
@@ -161,7 +162,7 @@ class prediction(Resource):
             info.append(float(request.values['vessels']))
             info.append(float(request.values['thal']))
 
-            clf = predict_heart_diease()
+            # clf = predict_heart_diease()
             pred, pred_proba, coef, intercept = cal(clf, info)
             print(pred)
             print(pred_proba)
@@ -211,7 +212,7 @@ class collections(Resource):
             return {"name":"success", "result": result}, 200
         except:
             return {'Error': 'DB not established'}, 404
-
+            
     @api.response(200, "ok")
     @api.response(404, 'Error')
     @api.doc(description="HTTP operation: GET /<collections>")
